@@ -3,6 +3,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Markdig;
 
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDirectoryBrowser();
@@ -40,7 +42,7 @@ app.Map("/{path}", async (string path, IWebHostEnvironment env) =>
         var pdf = pdfRegex.Match(markdown);
         if (pdf.Success)
         {
-            var pdfPath = Path.Combine("Content", pdf.Groups[1].Value);
+            var pdfPath = "~/Content/" + pdf.Groups[1].Value;
             return Results.Redirect(pdfPath);
         }
         else return new HtmlResult(Markdown.ToHtml(markdown));
