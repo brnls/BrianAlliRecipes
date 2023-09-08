@@ -1,10 +1,7 @@
-using System.Net;
 using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
 using Markdig;
-
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,7 +48,7 @@ app.Map("/{path}", async (string path, IWebHostEnvironment env) =>
     return Results.NotFound();
 });
 
-app.Map("/", async (IWebHostEnvironment env) =>
+app.Map("/", (IWebHostEnvironment env) =>
 {
     var dir = env.WebRootFileProvider.GetDirectoryContents("/");
     var md = $"""
