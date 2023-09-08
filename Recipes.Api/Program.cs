@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -50,8 +51,18 @@ app.Map("/{path}", async (string path, IWebHostEnvironment env) =>
     return Results.NotFound();
 });
 
+app.Map("/", async (IWebHostEnvironment env) =>
+{
+    var dir = env.WebRootFileProvider.GetDirectoryContents("/");
+    var md = $"""
+    # Recipes
+    {string.Join("\n", dir.Select(x => $"- [{x.Name}](<./{x.Name}>)"))}
+    """;
+    return new HtmlResult(Markdown.ToHtml(md));
+});
+
+
 app.UseStaticFiles();
-app.UseDirectoryBrowser();
 
 app.Run();
 
