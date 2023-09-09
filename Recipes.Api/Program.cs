@@ -50,10 +50,13 @@ app.Map("/{path}", async (string path, IWebHostEnvironment env) =>
 
 app.Map("/", (IWebHostEnvironment env) =>
 {
-    var dir = env.WebRootFileProvider.GetDirectoryContents("/");
+    var dir = env.WebRootFileProvider
+        .GetDirectoryContents("/")
+        .Where(x => !x.IsDirectory);
+
     var md = $"""
     # Recipes
-    {string.Join("\n", dir.Select(x => $"- [{x.Name}](<./{x.Name}>)"))}
+    {string.Join("\n", dir.Select(x => $"- [{x.Name.Replace(".md", "")}](<./{x.Name}>)"))}
     """;
     return new HtmlResult(Markdown.ToHtml(md));
 });
