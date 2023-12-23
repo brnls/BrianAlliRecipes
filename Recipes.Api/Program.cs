@@ -11,20 +11,8 @@ var app = builder.Build();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
-    ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedHost
-    | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
+    ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.All
 });
-
-app.Use(async (ctx, next) =>
-{
-    const string pathBaseHeader = "X-Forwarded-PathBase";
-    if (ctx.Request.Headers.TryGetValue(pathBaseHeader, out var value))
-    {
-        ctx.Request.PathBase = value[0];
-    }
-    await next();
-});
-
 
 var pdfRegex = new Regex("\\[\\[(.*)\\]\\]");
 
